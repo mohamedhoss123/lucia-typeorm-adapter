@@ -53,11 +53,11 @@ export const typeormAdapter = (
                         await transactionalEntityManager.save(Key, key)
                     })
                 } catch (e) {
-                    const error = e as Partial<PossiblePrismaError>;
-                    if (error.code === "P2025") {
-                        // user does not exist
-                        return;
-                    }
+                    // const error = e as Partial<PossiblePrismaError>;
+                    // if (error.code === "P2025") {
+                    //     // user does not exist
+                    //     return;
+                    // }
                     throw e;
                 }
             },
@@ -78,7 +78,7 @@ export const typeormAdapter = (
                     }
                 });
                 if (!result) return null;
-                return transformPrismaSession(result);
+                return transformTypeormSession(result);
             },
             getSessionsByUserId: async (userId) => {
                 if (!Session) {
@@ -89,7 +89,7 @@ export const typeormAdapter = (
                         user_id: userId
                     }
                 });
-                return sessions.map((session) => transformPrismaSession(session));
+                return sessions.map((session) => transformTypeormSession(session));
             },
             setSession: async (session) => {
                 if (!Session) {
@@ -211,7 +211,7 @@ export const typeormAdapter = (
     };
 };
 
-export const transformPrismaSession = (
+export const transformTypeormSession = (
     sessionData: ObjectLiteral
 ): SessionSchema => {
     const { active_expires, idle_expires: idleExpires, ...data } = sessionData;
