@@ -4,7 +4,9 @@
 
 ## Installation
 
-until now there is no npm version so please download it localy
+```
+npm i lucia-adapter-typeorm
+```
 
 ## usage 
 
