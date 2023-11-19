@@ -1,4 +1,4 @@
-# @lucia-auth/adapter-typeorm
+# lucia-adapter-typeorm
 
 [typeorm](https://typeorm.io/) adapter for lucia
 
