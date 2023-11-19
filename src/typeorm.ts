@@ -113,11 +113,7 @@ export const typeormAdapter = (
                     throw new Error("Session table not defined");
                 }
                 try {
-                    await manager.delete(Session, {
-                        where: {
-                            id: sessionId
-                        }
-                    });
+                    await manager.delete(Session,  sessionId );
                 } catch (e) {
                     const error = e as Partial<PossiblePrismaError>;
                     if (error.code === "P2025") {
@@ -131,82 +127,73 @@ export const typeormAdapter = (
                 if (!Session) {
                     throw new Error("Session table not defined");
                 }
-                await manager.delete(Session, {
-                    where: {
-                        user_id: userId
-                    }
-                });
+                await manager.delete(Session, { user_id: userId });
             },
             updateSession: async (userId, partialSession) => {
                 if (!Session) {
                     throw new Error("Session table not defined");
                 }
-                await manager.update(Session, 
-                    {where: {
-                        id: userId
-                    }}, partialSession
+                await manager.update(Session,
+                    {
+                        where: {
+                            id: userId
+                        }
+                    }, partialSession
                 );
             },
             getKey: async (keyId) => {
-				return await manager.findOne(Key,{
-					where: {
-						id: keyId
-					}
-				}) as KeySchema;
-			},
-			getKeysByUserId: async (userId) => {
-				return await  manager.find(Key,{
-					where: {
-						user_id: userId
-					}
-				}) as KeySchema[];
-			},
+                return await manager.findOne(Key, {
+                    where: {
+                        id: keyId
+                    }
+                }) as KeySchema;
+            },
+            getKeysByUserId: async (userId) => {
+                return await manager.find(Key, {
+                    where: {
+                        user_id: userId
+                    }
+                }) as KeySchema[];
+            },
             setKey: async (key) => {
-				try {
-					await manager.save(Key,key);
-				} catch (e) {
-					const error = e as Partial<PossiblePrismaError>;
-					if (error.code === "P2003") {
-						throw new LuciaError("AUTH_INVALID_USER_ID");
-					}
-					if (error.code === "P2002" && error.message?.includes("`id`")) {
-						throw new LuciaError("AUTH_DUPLICATE_KEY_ID");
-					}
-					throw error;
-				}
-			},
+                try {
+                    await manager.save(Key, key);
+                } catch (e) {
+                    const error = e as Partial<PossiblePrismaError>;
+                    if (error.code === "P2003") {
+                        throw new LuciaError("AUTH_INVALID_USER_ID");
+                    }
+                    if (error.code === "P2002" && error.message?.includes("`id`")) {
+                        throw new LuciaError("AUTH_DUPLICATE_KEY_ID");
+                    }
+                    throw error;
+                }
+            },
             deleteKey: async (keyId) => {
-				try {
-					await manager.delete(Key,{
-						where: {
-							id: keyId
-						}
-					});
-				} catch (e) {
-					const error = e as Partial<PossiblePrismaError>;
-					if (error.code === "P2025") {
-						// key does not exist
-						return;
-					}
-					throw e;
-				}
-			},
+                try {
+                    console.log(keyId);
+                    await manager.delete(Key, keyId );
+                } catch (e) {
+                    const error = e as Partial<PossiblePrismaError>;
+                    if (error.code === "P2025") {
+                        // key does not exist
+                        return;
+                    }
+                    throw e;
+                }
+            },
             deleteKeysByUserId: async (userId) => {
-				await manager.delete(Key,{
-					where: {
-						user_id: userId
-					}
-				});
-			},
+                await manager.delete(Key, { user_id: userId });
+            },
             updateKey: async (keyId, partialKey) => {
-				await manager.update(Key,{
-					where: {
-						id: keyId
-					}
-				},partialKey);
-			}
+                await manager.update(Key, {
+                    where: {
+                        id: keyId
+                    }
+                }, partialKey);
+            }
 
-          
+
         };
     };
 };

@@ -11,6 +11,6 @@ export class key extends BaseEntity {
     user_id: string
 
     @ManyToOne(()=>user,(user) => {user.keys})
-    user:user
+    user:Relation<user>
 
 }
